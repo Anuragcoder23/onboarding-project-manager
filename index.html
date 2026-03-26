@@ -941,7 +941,7 @@ async function sendChat(){
     const r=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:MDL,max_tokens:1500,system:buildSys(),messages:hist})});
     if(!r.ok){const e=await r.text();throw new Error(`${r.status}: ${e.substring(0,80)}`);}
     const data=await r.json();if(data.error)throw new Error(data.error.message);
-    const reply=data.content?.map(b=>b.type==='text'?b.text:'').join('')||'No response.';
+    const reply = data.choices?.[0]?.message?.content || 'No response.';
     hist.push({role:'assistant',content:reply});hideTyp();addMsg('ai',reply);
   }catch(e){hideTyp();if(e.message.includes('429'))addMsg('ai','⚠️ **Rate limit** — please wait 30 seconds and try again.');else addMsg('ai',`⚠️ Error: ${e.message}\n\nPlease try again.`);}
   busy=false;btn.classList.remove('spin');btn.textContent='➤';
@@ -980,7 +980,7 @@ FORMAT (always follow exactly):
     const r=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:MDL,max_tokens:1400,system:sys,messages:[{role:'user',content:`TASK REVIEW REQUEST\n\nPM Task Basecamp URL: ${pm||'Not provided'}\nDeveloper Response URL: ${dev||'Not provided'}\nAdditional Context / Task Description:\n${ctx||'No additional context provided — please review based on URLs and give a NEEDS REVIEW verdict asking for more description'}\n\nIMPORTANT: You cannot access these URLs directly. Base your review entirely on the context text above. If context is missing, give a structured NEEDS REVIEW response asking specifically what information is needed.`}]})});
     if(!r.ok){const e=await r.text();throw new Error(`${r.status}: ${e.substring(0,80)}`);}
     const data=await r.json();if(data.error)throw new Error(data.error.message);
-    const reply=data.content?.map(b=>b.type==='text'?b.text:'').join('')||'Error';
+    const reply = data.choices?.[0]?.message?.content || 'Error';
     document.getElementById('tRh').textContent='📋 Task Review Complete';
     const low=reply.toLowerCase(),vc=low.includes('✅ pass')&&!low.includes('❌')?'p':low.includes('❌ fail')?'f':'w',vt=vc==='p'?'✅ PASS':vc==='f'?'❌ FAIL':'⚠️ NEEDS REVIEW';
     const fmt=reply.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/^## (.+)$/gm,'<div style="font-size:12px;font-weight:700;color:var(--t1);margin:12px 0 4px;padding-top:10px;border-top:1px solid var(--b1)">$1</div>').replace(/^- (.+)$/gm,'<div style="padding:3px 0 3px 12px;border-left:2px solid var(--b2);margin:3px 0;font-size:12px">$1</div>').replace(/✅/g,'<span style="color:var(--grn)">✅</span>').replace(/❌/g,'<span style="color:var(--red)">❌</span>').replace(/⚠️/g,'<span style="color:var(--ora)">⚠️</span>').replace(/\n/g,'<br>');
@@ -1000,7 +1000,7 @@ async function runDesign(){
     const r=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:MDL,max_tokens:1800,system:sys,messages:[{role:'user',content:`Design: ${fig||'Not provided'}\nLive: ${live||'Not provided'}\nBasecamp: ${bc||'Not provided'}\nRequirements:\n${det||'General review'}`}]})});
     if(!r.ok){const e=await r.text();throw new Error(`${r.status}: ${e.substring(0,80)}`);}
     const data=await r.json();if(data.error)throw new Error(data.error.message);
-    const reply=data.content?.map(b=>b.type==='text'?b.text:'').join('')||'Error';
+    const reply = data.choices?.[0]?.message?.content || 'Error';
     document.getElementById('dRh').textContent='🎨 Design Review Complete';
     const pc=(reply.match(/✅/g)||[]).length,fc=(reply.match(/❌/g)||[]).length,wc=(reply.match(/⚠️/g)||[]).length;
     const vc=fc>pc?'f':wc>0?'w':'p',vt=fc>0?`❌ ${fc} Issues`:wc>0?`⚠️ ${wc} Review Items`:'✅ Approved';
