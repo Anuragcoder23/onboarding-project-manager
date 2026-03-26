@@ -6,9 +6,13 @@ export default async function handler(req, res) {
     }
 
     const body = req.body || {};
-    const messages = body.messages || [
-      { role: "user", content: "Hello" }
-    ];
+    const messages = body.messages || [];
+
+    // Convert messages to OpenRouter format
+    const formattedMessages = messages.map(m => ({
+      role: m.role,
+      content: [{ type: "text", text: m.content }]
+    }));
 
     const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
       method: "POST",
@@ -19,8 +23,8 @@ export default async function handler(req, res) {
         "X-Title": "AI Project Manager"
       },
       body: JSON.stringify({
-        model: "openai/gpt-oss-20b",
-        messages: messages
+        model: "openai/gpt-4o-mini",
+        messages: formattedMessages
       })
     });
 
@@ -29,10 +33,13 @@ export default async function handler(req, res) {
     return res.status(200).json(data);
 
   } catch (error) {
+
     console.error(error);
+
     return res.status(500).json({
       error: "Server crashed",
       details: error.message
     });
+
   }
 }
