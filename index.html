@@ -903,35 +903,27 @@ function filterProj(){const q=(document.getElementById('srch').value||'').toLowe
 let hist=[],busy=false;
 function buildSys(){
 
-const faqCtx = FAQ.map(f => `Q: ${f.q}\nA: ${f.a.replace(/<[^>]*>/g,'')}`).join('\n\n');
+const faqCtx = FAQ.map(f =>
+`Q: ${f.q}
+A: ${f.a.replace(/<[^>]*>/g,'')}`
+).join('\n\n');
 
-const pLines = P.map((p,i)=>`${i+1}. [${p.mg}] ${p.n} | ${p.s} | ${p.d} | ${p.w} weeks`).join('\n');
+const pLines = P.map((p,i)=>
+`${i+1}. [${p.mg}] ${p.n} | ${p.s} | ${p.d} | ${p.w} weeks`
+).join('\n');
 
 return `
 You are an AI Project Manager assistant for Growth99.
 
-You have access to ${P.length} projects.
+You have COMPLETE access to ${P.length} projects.
 
 BASECAMP ACCOUNT: Growth99
 BASECAMP URL: https://3.basecamp.com/4023059
 
-PROJECT DATA:
+Managers workload:
+${Object.entries(aggM()).map(([k,v])=>`${k}: ${v} projects`).join('\n')}
 
-${pLines}
-
-FAQ:
-
-${faqCtx}
-`;
-}
-
-BASECAMP ACCOUNT: Growth99
-BASECAMP URL: https://3.basecamp.com/4023059
-
-Managers and project counts:
-${Object.entries(aggM()).map(([k,v])=>`${k} = ${v} projects`).join('\n')}
-
-PROJECT LIST:
+ALL PROJECT DATA:
 
 ${pLines}
 
@@ -939,7 +931,7 @@ TIMELINES & PROCESS:
 
 ${faqCtx}
 
-Always base answers on the dataset above.
+Always answer using the project dataset above.
 `;
 }
 BASECAMP ACCOUNT: Growth99 | Account ID: 4023059
