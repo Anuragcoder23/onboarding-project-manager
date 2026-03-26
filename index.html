@@ -941,7 +941,7 @@ async function sendChat(){
     const r=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:MDL,max_tokens:1500,system:buildSys(),messages:hist})});
     if(!r.ok){const e=await r.text();throw new Error(`${r.status}: ${e.substring(0,80)}`);}
     const data=await r.json();if(data.error)throw new Error(data.error.message);
-    const reply=data.content?.map(b=>b.type==='text'?b.text:'').join('')||'No response.';
+    const reply = data.choices?.[0]?.message?.content || "No response.";
     hist.push({role:'assistant',content:reply});hideTyp();addMsg('ai',reply);
   }catch(e){hideTyp();if(e.message.includes('429'))addMsg('ai','⚠️ **Rate limit** — please wait 30 seconds and try again.');else addMsg('ai',`⚠️ Error: ${e.message}\n\nPlease try again.`);}
   busy=false;btn.classList.remove('spin');btn.textContent='➤';
