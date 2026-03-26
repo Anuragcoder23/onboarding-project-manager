@@ -903,7 +903,7 @@ function filterProj(){const q=(document.getElementById('srch').value||'').toLowe
 let hist=[],busy=false;
 function buildSys(){
 
-const faqCtx = FAQ.map(f=>`Q: ${f.q}\nA: ${f.a.replace(/<[^>]*>/g,'')}`).join('\n\n');
+const faqCtx = FAQ.map(f => `Q: ${f.q}\nA: ${f.a.replace(/<[^>]*>/g,'')}`).join('\n\n');
 
 const pLines = P.map((p,i)=>`${i+1}. [${p.mg}] ${p.n} | ${p.s} | ${p.dev} | ${p.w} weeks`).join('\n');
 
@@ -915,42 +915,21 @@ You have COMPLETE access to ALL ${P.length} projects in the database.
 Your job is to help users understand the project dashboard.
 
 You can answer questions about:
-
-• total project count
-• project summaries
-• project statuses
-• manager workloads
-• developer workloads
-• timelines
-• delays or risks
+- total project count
+- project summaries
+- project statuses
+- manager workloads
+- developer workloads
+- timelines
+- delays or risks
 
 Users may ask questions in natural language.
 
-Examples:
-- total project count
-- how many projects are on hold
-- show Anurag projects
-- summary of project XYZ
-- status of project XYZ
-- which manager has most projects
-- which developer is overloaded
-- are any projects delayed
-When answering questions about projects:
-
-• Use the dataset provided below.
-• If asked for "total projects", count the projects.
-• If asked for a manager's projects, filter by manager name.
-• If asked for project status, return the project's status.
-• If asked for a summary, include manager, developer, status and weeks.
-• Always base answers on the dataset.
-When a user asks about a project provide:
-
-• project name
-• manager
-• developer
-• status
-• weeks
-• short summary
+When answering questions:
+• Always use the dataset below
+• If asked for total projects → count them
+• If asked for manager projects → filter by manager
+• If asked for project summary → include manager, developer, status, weeks
 
 MANAGERS (with project counts):
 ${Object.entries(aggM()).map(([k,v])=>`${k} = ${v} projects`).join('\n')}
@@ -960,7 +939,6 @@ ALL ${P.length} PROJECTS (format: #. [Manager] Name | Status | Developer | Weeks
 ${pLines}
 `;
 }
-
 BASECAMP ACCOUNT: Growth99 | Account ID: 4023059
 BASECAMP BASE URL: https://3.basecamp.com/4023059/
 - To find a project in Basecamp: https://3.basecamp.com/4023059/ then search by project name
