@@ -6,13 +6,20 @@ export default async function handler(req, res) {
     }
 
     const body = req.body || {};
+    const system = body.system || "";
     const messages = body.messages || [];
 
     // Convert messages to OpenRouter format
-    const formattedMessages = messages.map(m => ({
-      role: m.role,
-      content: [{ type: "text", text: m.content }]
-    }));
+    const formattedMessages = [
+      {
+        role: "system",
+        content: system
+      },
+      ...messages.map(m => ({
+        role: m.role,
+        content: m.content
+      }))
+    ];
 
     const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
       method: "POST",
