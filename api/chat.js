@@ -1,5 +1,11 @@
 export default async function handler(req, res) {
   try {
+
+    const body = req.body || {};
+    const messages = body.messages || [
+      { role: "user", content: "Hello" }
+    ];
+
     const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -10,7 +16,7 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         model: "openai/gpt-oss-20b",
-        messages: req.body.messages
+        messages: messages
       })
     });
 
