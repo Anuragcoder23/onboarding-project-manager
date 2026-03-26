@@ -902,7 +902,54 @@ function renderProj(list){
 function filterProj(){const q=(document.getElementById('srch').value||'').toLowerCase(),fs=document.getElementById('fSt').value,fm=document.getElementById('fMg').value;renderProj(P.filter(p=>(!q||p.n.toLowerCase().includes(q)||(p.mg||'').toLowerCase().includes(q)||(p.d||'').toLowerCase().includes(q))&&(!fs||p.s===fs)&&(!fm||p.mg===fm)));}
 let hist=[],busy=false;
 function buildSys(){
-  return "You are an AI assistant for project management.";
+
+const faqCtx = FAQ.map(f=>`Q: ${f.q}\nA: ${f.a.replace(/<[^>]*>/g,'')}`).join('\n\n');
+
+const pLines = P.map((p,i)=>`${i+1}. [${p.mg}] ${p.n} | ${p.s} | ${p.dev} | ${p.w} weeks`).join('\n');
+
+return `
+You are an AI Project Manager assistant for the Growth99 onboarding team.
+
+You have COMPLETE access to ALL ${P.length} projects in the database.
+
+Your job is to help users understand the project dashboard and answer questions about:
+
+• total project count  
+• project summaries  
+• project status  
+• manager workload  
+• developer workload  
+• timelines  
+• delays or risks  
+
+Users may ask questions in natural language.
+
+Examples:
+- total project count
+- how many projects are on hold
+- show Anurag projects
+- which manager has most projects
+- summary of project XYZ
+- status of project XYZ
+
+When answering:
+
+• Use the dataset below  
+• If asked for counts → calculate from the dataset  
+• If asked for project summary → include manager, developer, status and weeks  
+• If asked about manager → list their projects  
+
+BASECAMP ACCOUNT: Growth99 | Account ID: 4023059
+BASECAMP BASE URL: https://3.basecamp.com/4023059
+
+MANAGERS (with project counts):
+${Object.entries(aggM()).map(([k,v])=>`${k} = ${v} projects`).join('\n')}
+
+ALL ${P.length} PROJECTS (format: #. [Manager] Name | Status | Developer | Weeks):
+
+${pLines}
+
+`;
 }
 BASECAMP ACCOUNT: Growth99 | Account ID: 4023059
 BASECAMP BASE URL: https://3.basecamp.com/4023059/
