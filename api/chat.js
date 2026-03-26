@@ -9,7 +9,7 @@ export default async function handler(req, res) {
     const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
       method: "POST",
       headers: {
-        "Authorization": "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",
+        "Authorization": "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",
         "Content-Type": "application/json",
         "HTTP-Referer": "https://onboarding-project-manager.vercel.app",
         "X-Title": "AI Project Manager"
