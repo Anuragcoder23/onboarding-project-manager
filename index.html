@@ -901,8 +901,65 @@ function renderProj(list){
 }
 function filterProj(){const q=(document.getElementById('srch').value||'').toLowerCase(),fs=document.getElementById('fSt').value,fm=document.getElementById('fMg').value;renderProj(P.filter(p=>(!q||p.n.toLowerCase().includes(q)||(p.mg||'').toLowerCase().includes(q)||(p.d||'').toLowerCase().includes(q))&&(!fs||p.s===fs)&&(!fm||p.mg===fm)));}
 let hist=[],busy=false;
-function buildSys(){const faqCtx=FAQ.map(f=>`Q: ${f.q}\nA: ${f.a.replace(/<[^>]*>/g,'')}`).join('\n\n');const pLines=P.map((p,i)=>`${i+1}. [${p.mg}] ${p.n} | ${p.s} | Dev: ${p.d||'Unassigned'} | Wks: ${p.w}`).join('\n');return `You are the AI Project Manager Agent for Growth99 onboarding team.
+function buildSys(){
+
+const faqCtx = FAQ.map(f=>`Q: ${f.q}\nA: ${f.a.replace(/<[^>]*>/g,'')}`).join('\n\n');
+
+const pLines = P.map((p,i)=>`${i+1}. [${p.mg}] ${p.n} | ${p.s} | ${p.dev} | ${p.w} weeks`).join('\n');
+
+return `
+You are an AI Project Manager assistant for the Growth99 onboarding team.
+
 You have COMPLETE access to ALL ${P.length} projects in the database.
+
+Your job is to help users understand the project dashboard.
+
+You can answer questions about:
+
+• total project count
+• project summaries
+• project statuses
+• manager workloads
+• developer workloads
+• timelines
+• delays or risks
+
+Users may ask questions in natural language.
+
+Examples:
+- total project count
+- how many projects are on hold
+- show Anurag projects
+- summary of project XYZ
+- status of project XYZ
+- which manager has most projects
+- which developer is overloaded
+- are any projects delayed
+When answering questions about projects:
+
+• Use the dataset provided below.
+• If asked for "total projects", count the projects.
+• If asked for a manager's projects, filter by manager name.
+• If asked for project status, return the project's status.
+• If asked for a summary, include manager, developer, status and weeks.
+• Always base answers on the dataset.
+When a user asks about a project provide:
+
+• project name
+• manager
+• developer
+• status
+• weeks
+• short summary
+
+MANAGERS (with project counts):
+${Object.entries(aggM()).map(([k,v])=>`${k} = ${v} projects`).join('\n')}
+
+ALL ${P.length} PROJECTS (format: #. [Manager] Name | Status | Developer | Weeks):
+
+${pLines}
+`;
+}
 
 BASECAMP ACCOUNT: Growth99 | Account ID: 4023059
 BASECAMP BASE URL: https://3.basecamp.com/4023059/
