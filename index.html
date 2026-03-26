@@ -1045,6 +1045,7 @@ renderAll();
 document.getElementById('qBt').innerHTML=QS.map(q=>`<button class="qb" onclick="qa(${JSON.stringify(q)})">${q}</button>`).join('');
 const mm=aggM();
 addMsg('ai',`✦ **AI Project Manager Agent ready!**\n\n📊 **${P.length} projects** · ${Object.keys(mm).length} managers:\n${Object.entries(mm).map(([k,v])=>`${k} (${v})`).join(' · ')}\n\n**Ask me anything:** counts, statuses, workloads, timelines\n\n**Also available:** ✅ Task Review · 🎨 Design Review · 📚 Timelines`);
+syncFromGoogleSheet();
 </script>
 </body>
 </html>
