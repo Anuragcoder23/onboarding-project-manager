@@ -295,7 +295,7 @@ tr:last-child td{border-bottom:none}
   </nav>
   <div class="sb-foot">
     <span id="sbTm"></span>
-    <button class="sync" id="syncBtn" onclick="openSyncModal()">↻ Sync</button>
+    <button class="sync" id="syncBtn" onclick="syncFromGoogleSheet()">↻ Sync</button>
   </div>
 </aside>
 
@@ -756,6 +756,31 @@ function parseCSVRows(csv){
       np.push({n:cols[0].replace(/\|/g,'').trim(),s:cols[1]?cols[1].trim():'Unknown',w:parseInt(cols[2])||0,m:cols[3]?cols[3].trim():'',mg:cols[4].trim(),d:cols[5]?cols[5].trim():''});
   }
   return np;
+}
+async function syncFromGoogleSheet(){
+
+  try{
+
+    const res = await fetch(SHEET);
+    const csv = await res.text();
+
+    const newProjects = parseCSVRows(csv);
+
+    if(newProjects.length){
+        P = newProjects;
+        renderDashboard();
+        alert("Dashboard synced successfully ✅");
+    }else{
+        alert("Sheet returned empty data");
+    }
+
+  }catch(err){
+
+    console.error(err);
+    alert("Google Sheet sync failed ❌");
+
+  }
+
 }
 function handleFileInput(file){if(file)readCSVFile(file);}
 function handleFileDrop(file){if(file)readCSVFile(file);}
